@@ -96,7 +96,7 @@ async def reset(client: Client, message: Message):
         print("Error in reset: ", e)
         return await message.reply_text("Sorry, Failed to reset chat history.") # type:ignore
 
-@Client.on_message(filters.text & (filters.private | filters.group))
+@Client.on_message(filters.text & (filters.group))
 async def modelai_command(client, message):
     text = message.text
     if text.startswith('/'):
@@ -113,3 +113,32 @@ async def modelai_command(client, message):
     answer = response.choices[0].message.content
     await message.reply_text(f">**{answer}**")
     memory.append({"role": "assistant", "content": answer})
+
+
+
+
+@Client.on_message(filters.text & filters.private) # type:ignore
+async def ai_res(client: Client, message: Message ):
+    sticker = None
+    reply = None
+    try:
+        await users.get_or_add_user(message.from_user.id, message.from_user.first_name)
+        if FSUB and not await get_fsub(client, message):return
+        sticker = await message.reply_sticker(random.choice(STICKERS_IDS)) # type:ignore
+        text = message.text
+        if text.startswith('/'):
+            return
+        user_id = message.from_user.id
+        history = await chat_history.get_history(user_id)
+        history.append({"role": "user", "content": text})
+        reply = await get_ai_response(history)
+        history.append({"role": "assistant", "content": reply})
+        await message.reply_text(reply) # type:ignore
+        await chat_history.add_history(user_id, history)
+    except Exception as e:
+        print("Error in ai_res: ", e)
+        reply = "Sorry, I am not available right now."
+        await message.reply_text(reply) # type:ignore
+    finally:
+        if sticker:
+            await sticker.delete()
