@@ -130,7 +130,6 @@ async def ai_res(client: Client, message: Message ):
             return
         user_id = message.from_user.id
         history = await chat_history.get_history(user_id)
-        history.append({"role": "system", "content": mmm})
         history.append({"role": "user", "content": text})
         reply = await get_ai_response(history)
         history.append({"role": "assistant", "content": reply})
