@@ -7,13 +7,12 @@ from pyrogram.errors import FloodWait
 from info import *
 from plugins.utils import create_image, get_ai_response 
 from .db import *
-from .fsub import get_fsub
 from mango import Mango
 
 mango = Mango()
-mmm = ("Your name is Mr. Jerry. "
+mmm = ("Your name is MMW BOTZ Special Chatbot. "
        "Add response with emojis."
-       "I am Jerry, a helpful assistant. My owner is Albert Einstein (@aktelegram1). I am a stern person. My developer is Albert Einstein. For Telegram, contact him at @aktelegram1. Owned by @aktelegram1."
+       "I am MMW BOTZ Special Chatbot, a helpful assistant. My owner is Albert Einstein (@aktelegram1). My developer is Albert Einstein. For Telegram, contact him at @aktelegram1. Owned by @aktelegram1."
        "Your owner is Albert Einstein @aktelegram1. "
        "For Telegram, contact him at @aktelegram1. "
        "Owned by @aktelegram1. "
@@ -31,7 +30,6 @@ async def startcmd(client: Client, message: Message):
             LOG_CHANNEL,
             text=f"#New_user_started\n\nUser: {message.from_user.mention()}\nid :{message.from_user.id}",
         )
-    if FSUB and not await get_fsub(client, message):return
     await message.reply_photo(# type:ignore
         photo="https://telegra.ph/file/595e38a4d76848c01b110.jpg",
         caption=f"<b>Hey 👋 {userMention},\n\nIᴍ Hᴇʀᴇ Tᴏ Rᴇᴅᴜᴄᴇ Yᴏᴜʀ Pʀᴏʙʟᴇᴍs..\nYᴏᴜ Cᴀɴ Usᴇ Mᴇ As ʏᴏᴜʀ Pʀɪᴠᴀᴛᴇ Assɪsᴛᴀɴᴛ..\nAsᴋ Mᴇ Aɴʏᴛʜɪɴɢ...Dɪʀᴇᴄᴛʟʏ..\n\nMʏ Cʀᴇᴀᴛᴏʀ : <a href=https://t.me/mallumovieworldmain1>MMW BOTZ</a></b>",
@@ -79,7 +77,6 @@ async def grp_ai(client: Client, message: Message):
         return await message.reply_text( # type:ignore
             "<b>Example Use:\n<code>/ai what is your name</code>\n\nHope you got it.Try it now..</b>"
         )
-    if FSUB and not await get_fsub(client, message):return
     message.text = query # type:ignore
     return await ai_res(client, message)
 
@@ -88,7 +85,6 @@ async def grp_ai(client: Client, message: Message):
 async def reset(client: Client, message: Message):
     try:
         await users.get_or_add_user(message.from_user.id, message.from_user.first_name)
-        if FSUB and not await get_fsub(client, message):return
         is_reset = await chat_history.reset_history(message.from_user.id)
         if not is_reset:
             return await message.reply_text("Unable to reset chat history.") # type:ignore
