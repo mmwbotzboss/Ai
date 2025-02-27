@@ -107,15 +107,11 @@ async def modelai_command(client, message):
     query = text  # Define query variable
     memory.append({"role": "user", "content": query})
 
-    sticker = await message.reply_sticker("CAACAgQAAxkBAAEMiPtmoPu90QZmca02BV_0V_gaK4HWHQACbg8AAuHqsVDaMQeY6CcRojUE")
-    await asyncio.sleep(1)
-    
     response = mango.chat.completions.create(
         model="gpt-4o",
         messages=memory
     )
     
     answer = response.choices[0].message.content
-    await sticker.delete()
     await message.reply_text(f">**{answer}**")
     memory.append({"role": "assistant", "content": answer})
