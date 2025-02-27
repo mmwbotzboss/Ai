@@ -8,7 +8,18 @@ from info import *
 from plugins.utils import create_image, get_ai_response 
 from .db import *
 from .fsub import get_fsub
+from mango import Mango
 
+mango = Mango()
+mmm = ("Your name is Mr. Jerry. "
+       "Add response with emojis."
+       "I am Jerry, a helpful assistant. My owner is Albert Einstein (@aktelegram1). I am a stern person. My developer is Albert Einstein. For Telegram, contact him at @aktelegram1. Owned by @aktelegram1."
+       "Your owner is Albert Einstein @aktelegram1. "
+       "For Telegram, contact him at @aktelegram1. "
+       "Owned by @aktelegram1. "
+       "Albert Einstein's GitHub: https://github.com/mmwbotzmain.")
+
+memory = [{"role": "system", "content": mmm}]
 
 @Client.on_message(filters.command("start") & filters.incoming) # type:ignore
 async def startcmd(client: Client, message: Message):
@@ -69,7 +80,14 @@ async def grp_ai(client: Client, message: Message):
         )
     if FSUB and not await get_fsub(client, message):return
     message.text = query # type:ignore
-    return await ai_res(client, message)
+    memory.append({"role": "user", "content": query})
+    response = mango.chat.completions.create(
+        model="gpt-4o-realtime",
+        messages=memory
+    )
+    await message.reply_text(f">**{answer}**")
+    
+    memory.append({"role": "assistant", "content": answer})
 
 
 @Client.on_message(filters.command("reset") &  filters.private) # type:ignore
@@ -98,16 +116,18 @@ async def ai_res(client: Client, message: Message ):
         if text.startswith('/'):
             return
         user_id = message.from_user.id
-        history = await chat_history.get_history(user_id)
-        history.append({"role": "user", "content": text})
-        reply = await get_ai_response(history)
-        history.append({"role": "assistant", "content": reply})
-        await message.reply_text(reply) # type:ignore
-        await chat_history.add_history(user_id, history)
+        memory.append({"role": "user", "content": query})
+        response = mango.chat.completions.create(
+        model="gpt-4o-realtime",
+        messages=memory
+        )
+        answer = response.choices[0].message.content
+        await message.reply_text(f">**{answer}**")
+        memory.append({"role": "assistant", "content": answer})
     except Exception as e:
         print("Error in ai_res: ", e)
-        reply = "Sorry, I am not available right now."
-        await message.reply_text(reply) # type:ignore
+        answer = "Sorry, I am not available right now."
+        await message.reply_text(answer)
     finally:
         if sticker:
             await sticker.delete()
