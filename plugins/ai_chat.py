@@ -8,6 +8,18 @@ from info import *
 from plugins.utils import create_image, get_ai_response 
 from .db import *
 from .fsub import get_fsub
+from mango import Mango
+
+mango = Mango()
+mmm = ("Your name is Mr. Jerry. "
+       "Add response with emojis."
+       "I am Jerry, a helpful assistant. My owner is Albert Einstein (@aktelegram1). I am a stern person. My developer is Albert Einstein. For Telegram, contact him at @aktelegram1. Owned by @aktelegram1."
+       "Your owner is Albert Einstein @aktelegram1. "
+       "For Telegram, contact him at @aktelegram1. "
+       "Owned by @aktelegram1. "
+       "Albert Einstein's GitHub: https://github.com/mmwbotzmain.")
+
+memory = [{"role": "system", "content": mmm}]
 
 
 @Client.on_message(filters.command("start") & filters.incoming) # type:ignore
@@ -58,7 +70,7 @@ async def broadcasting_func(client : Client, message: Message):
     await msg.edit(f"Successfully Broadcasted\nTotal : {len(users_list)} \nCompleted : {completed} \nFailed : {failed}")
     
 
-@Client.on_message(filters.command("ai") & filters.chat(CHAT_GROUP)) # type:ignore
+@Client.on_message(filters.command("ai")) # type:ignore
 async def grp_ai(client: Client, message: Message):
     query : str | None = (
         message.text.split(" ", 1)[1] if len(message.text.split(" ", 1)) > 1 else None
@@ -86,28 +98,29 @@ async def reset(client: Client, message: Message):
         return await message.reply_text("Sorry, Failed to reset chat history.") # type:ignore
 
 
-@Client.on_message(filters.text & (filters.private | filters.group))
-async def ai_res(client: Client, message: Message ):
-    sticker = None
-    reply = None
-    try:
-        await users.get_or_add_user(message.from_user.id, message.from_user.first_name)
-        if FSUB and not await get_fsub(client, message):return
-        sticker = await message.reply_sticker(random.choice(STICKERS_IDS)) # type:ignore
-        text = message.text
-        if text.startswith('/'):
-            return
-        user_id = message.from_user.id
-        history = await chat_history.get_history(user_id)
-        history.append({"role": "user", "content": text})
-        reply = await get_ai_response(history)
-        history.append({"role": "assistant", "content": reply})
-        await message.reply_text(reply) # type:ignore
-        await chat_history.add_history(user_id, history)
-    except Exception as e:
-        print("Error in ai_res: ", e)
-        reply = "Sorry, I am not available right now."
-        await message.reply_text(reply) # type:ignore
-    finally:
-        if sticker:
-            await sticker.delete()
+@Client.on_message(filters.text & (filters.private | filters.chat(CHAT_GROUP)))
+async def modelai_command(client, message):
+    if len(message.command) < 2:
+        return await message.reply_text("**Please provide a query.**")
+    
+    query = " ".join(message.command[1:])
+    
+    if not query:
+        await message.reply_text("**Usage:** ```/jerry who is your owner```")
+        return
+    
+    # Storing the user query in memory list
+    memory.append({"role": "user", "content": query})
+    
+    sticker = await message.reply_sticker("CAACAgQAAxkBAAEMiPtmoPu90QZmca02BV_0V_gaK4HWHQACbg8AAuHqsVDaMQeY6CcRojUE")
+    await asyncio.sleep(1)
+
+    response = mango.chat.completions.create(
+        model="gpt-4o-realtime",
+        messages=memory
+    )
+    answer = response.choices[0].message.content
+    await sticker.delete()
+    await message.reply_text(f">**{answer}**")
+ 
+    memory.append({"role": "assistant", "content": answer})
