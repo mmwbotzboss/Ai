@@ -2,6 +2,9 @@
 from os import environ
 from dotenv import load_dotenv
 
+import os, time, re
+id_pattern = re.compile(r'^.\d+$')
+
 load_dotenv()
 
 API_ID = environ.get("API_ID" , "")
@@ -21,3 +24,19 @@ ONLY_SCAN_IN_GRP = environ.get(
     "ONLY_SCAN_IN_GRP", True
 )  # If IMG_SCAN_IN_GRP is set to True, image scanning is restricted to your support group only. If it's False, the image scanning feature can be used anywhere.
 REACTIONS = ["❤️‍🔥", "⚡", "🔥"]
+
+
+
+class Config(object):
+    API_ID    = os.environ.get("API_ID", "")
+    API_HASH  = os.environ.get("API_HASH", "")
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", "") 
+   
+    # other configs
+    BOT_UPTIME  = time.time()
+    ADMIN = [int(admin) if id_pattern.search(admin) else admin for admin in os.environ.get('ADMIN', '').split()]
+
+    LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", ""))
+
+    # wes response configuration     
+    WEBHOOK = bool(os.environ.get("WEBHOOK", True))
