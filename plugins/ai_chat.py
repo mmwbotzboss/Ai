@@ -79,7 +79,7 @@ async def grp_ai(client: Client, message: Message):
         )
     if FSUB and not await get_fsub(client, message):return
     message.text = query # type:ignore
-    return await ai_res(client, message)
+    return await get_ai_response(client, message)
 
 
 @Client.on_message(filters.command("reset") &  filters.private) # type:ignore
