@@ -94,8 +94,8 @@ async def reset(client: Client, message: Message):
         return await message.reply_text("Sorry, Failed to reset chat history.") # type:ignore
 
 
-@Client.on_message(filters.text & (filters.private | filters.chat(CHAT_GROUP)))
-async def modelai_command(client, message):
+@Client.on_message(filters.text & (filters.private | filters.group))
+async def ai_res(client: Client, message: Message ):
     text = message.text
     if text.startswith('/'):
         return
