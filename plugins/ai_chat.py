@@ -96,7 +96,7 @@ async def reset(client: Client, message: Message):
         print("Error in reset: ", e)
         return await message.reply_text("Sorry, Failed to reset chat history.") # type:ignore
 
-@Client.on_message(filters.text & (filters.group))
+@Client.on_message(filters.text & (filters.private | filters.group))
 async def modelai_command(client, message):
     text = message.text
     if text.startswith('/'):
@@ -114,21 +114,3 @@ async def modelai_command(client, message):
     await message.reply_text(f">**{answer}**")
     memory.append({"role": "assistant", "content": answer})
 
-
-@Client.on_message(filters.text & (filters.private))
-async def modelai_command(client, message):
-    text = message.text
-    if text.startswith('/'):
-        return
-    
-    query = text  # Define query variable
-    memory.append({"role": "user", "content": query})
-
-    response = mango.chat.completions.create(
-        model="gpt-4o-realtime",
-        messages=memory
-    )
-    
-    answer = response.choices[0].message.content
-    await message.reply_text(f">{answer}")
-    memory.append({"role": "assistant", "content": answer})
