@@ -125,7 +125,7 @@ async def modelai_command(client, message):
     memory.append({"role": "user", "content": query})
 
     response = mango.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o-realtime",
         messages=memory
     )
     
