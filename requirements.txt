@@ -6,7 +6,7 @@ hachoir
 Pillow
 aiohttp
 pytz
-MangoAPI
+MangoAPI==1.0.12
 
 
 anyio==4.6.2.post1
