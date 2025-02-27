@@ -100,16 +100,10 @@ async def reset(client: Client, message: Message):
 
 @Client.on_message(filters.text & (filters.private | filters.chat(CHAT_GROUP)))
 async def modelai_command(client, message):
-    if len(message.command) < 2:
-        return await message.reply_text("**Please provide a query.**")
-    
-    query = " ".join(message.command[1:])
-    
-    if not query:
-        await message.reply_text("**Usage:** ```/jerry who is your owner```")
-        return
-    
-    # Storing the user query in memory list
+    sticker = await message.reply_sticker(random.choice(STICKERS_IDS)) # type:ignore
+        text = message.text
+        if text.startswith('/'):
+            return
     memory.append({"role": "user", "content": query})
     
     sticker = await message.reply_sticker("CAACAgQAAxkBAAEMiPtmoPu90QZmca02BV_0V_gaK4HWHQACbg8AAuHqsVDaMQeY6CcRojUE")
