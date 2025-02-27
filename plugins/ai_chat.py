@@ -1,4 +1,3 @@
-# ©️biisal jai shree krishna 😎
 import asyncio
 import random
 from pyrogram import filters
@@ -23,7 +22,7 @@ async def startcmd(client: Client, message: Message):
     if FSUB and not await get_fsub(client, message):return
     await message.reply_photo(# type:ignore
         photo="https://telegra.ph/file/595e38a4d76848c01b110.jpg",
-        caption=f"<b>Jai Shree Krishna {userMention},\n\nIᴍ Hᴇʀᴇ Tᴏ Rᴇᴅᴜᴄᴇ Yᴏᴜʀ Pʀᴏʙʟᴇᴍs..\nYᴏᴜ Cᴀɴ Usᴇ Mᴇ As ʏᴏᴜʀ Pʀɪᴠᴀᴛᴇ Assɪsᴛᴀɴᴛ..\nAsᴋ Mᴇ Aɴʏᴛʜɪɴɢ...Dɪʀᴇᴄᴛʟʏ..\n\nMʏ Cʀᴇᴀᴛᴏʀ : <a href=https://t.me/biisal>Bɪɪsᴀʟ</a>\nMʏ Lᴏᴠᴇʀ : <a href=tg://settings/>Tʜɪs Pᴇʀsᴏɴ</a></b>",
+        caption=f"<b>Hey 👋 {userMention},\n\nIᴍ Hᴇʀᴇ Tᴏ Rᴇᴅᴜᴄᴇ Yᴏᴜʀ Pʀᴏʙʟᴇᴍs..\nYᴏᴜ Cᴀɴ Usᴇ Mᴇ As ʏᴏᴜʀ Pʀɪᴠᴀᴛᴇ Assɪsᴛᴀɴᴛ..\nAsᴋ Mᴇ Aɴʏᴛʜɪɴɢ...Dɪʀᴇᴄᴛʟʏ..\n\nMʏ Cʀᴇᴀᴛᴏʀ : <a href=https://t.me/mallumovieworldmain1>MMW BOTZ</a></b>",
     ) 
     return
 
@@ -45,12 +44,12 @@ async def broadcasting_func(client : Client, message: Message):
         if not user_id:
             continue
         try:
-            await to_copy_msg.copy(user_id , reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎭 ᴀᴅᴍɪɴ sᴜᴘᴘᴏʀᴛ 🎗️", url='https://t.me/bisal_files_talk')]]))
+            await to_copy_msg.copy(user_id , reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎭  sᴜᴘᴘᴏʀᴛ 🎗️", url='https://t.me/maxmallumovieworldsupport1')]]))
             completed += 1
         except FloodWait as e:
             if isinstance(e.value , int | float):
                 await asyncio.sleep(e.value)
-                await to_copy_msg.copy(user_id , reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎭 ᴀᴅᴍɪɴ sᴜᴘᴘᴏʀᴛ 🎗️", url='https://t.me/bisal_files_talk')]]))
+                await to_copy_msg.copy(user_id , reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎭  sᴜᴘᴘᴏʀᴛ 🎗️", url='https://t.me/maxmallumovieworldsupport1')]]))
                 completed += 1
         except Exception as e:
             print("Error in broadcasting:", e) 
