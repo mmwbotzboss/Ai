@@ -86,43 +86,8 @@ async def reset(client: Client, message: Message):
         return await message.reply_text("Sorry, Failed to reset chat history.") # type:ignore
 
 
-@Client.on_message(filters.command("gen") & filters.private)  # type:ignore
-async def gen_image(client: Client, message: Message):
-    """
-    Handles private messages with the /gen command and generates an image based on the provided prompt.
-    
-    Args:
-        client (Client): The Client object.
-        message (Message): The Message object.
-
-    Returns:
-        None
-    """
-    sticker = None
-    try:
-        await users.get_or_add_user(message.from_user.id, message.from_user.first_name)
-        if FSUB and not await get_fsub(client, message):return
-        sticker = await message.reply_sticker(random.choice(STICKERS_IDS)) # type:ignore
-        prompt = message.text.replace("/gen", "").strip()
-        encoded_prompt = prompt.replace("\n", " ")
-        if not prompt:
-            return await message.reply_text("Please provide a prompt.") # type:ignore
-        image_file = await create_image(encoded_prompt)
-        if not image_file:
-            return await message.reply_text("Failed to generate image.") # type:ignore
-        await message.reply_photo(photo=image_file , caption=f"Generated Image for prompt: {prompt[:150]}...") # type:ignore
-        image_file.close()
-    except Exception as e:
-        print("Error in gen_image: ", e)
-        return await message.reply_text("Sorry, I am not Available right now.") # type:ignore
-    finally:
-        if sticker:await sticker.delete()
-
-@Client.on_message(filters.text & filters.incoming & filters.private | filters.group) # type:ignore
+@Client.on_message(filters.text & (filters.private | filters.group))
 async def ai_res(client: Client, message: Message ):
-    """
-    Handles private text messages and sends AI responses back.
-    """
     sticker = None
     reply = None
     try:
