@@ -68,7 +68,7 @@ async def broadcasting_func(client : Client, message: Message):
     await msg.edit(f"Successfully Broadcasted\nTotal : {len(users_list)} \nCompleted : {completed} \nFailed : {failed}")
     
 
-@Client.on_message(filters.command("ai")) # type:ignore
+@Client.on_message(filters.command("ai") & filters.chat(CHAT_GROUP)) # type:ignore
 async def grp_ai(client: Client, message: Message):
     query : str | None = (
         message.text.split(" ", 1)[1] if len(message.text.split(" ", 1)) > 1 else None
@@ -77,6 +77,7 @@ async def grp_ai(client: Client, message: Message):
         return await message.reply_text( # type:ignore
             "<b>Example Use:\n<code>/ai what is your name</code>\n\nHope you got it.Try it now..</b>"
         )
+    if FSUB and not await get_fsub(client, message):return
     message.text = query # type:ignore
     return await ai_res(client, message)
 
@@ -85,6 +86,7 @@ async def grp_ai(client: Client, message: Message):
 async def reset(client: Client, message: Message):
     try:
         await users.get_or_add_user(message.from_user.id, message.from_user.first_name)
+        if FSUB and not await get_fsub(client, message):return
         is_reset = await chat_history.reset_history(message.from_user.id)
         if not is_reset:
             return await message.reply_text("Unable to reset chat history.") # type:ignore
@@ -92,7 +94,6 @@ async def reset(client: Client, message: Message):
     except Exception as e:
         print("Error in reset: ", e)
         return await message.reply_text("Sorry, Failed to reset chat history.") # type:ignore
-
 
 @Client.on_message(filters.text & (filters.private | filters.group))
 async def ai_res(client: Client, message: Message ):
