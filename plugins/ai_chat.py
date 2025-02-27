@@ -111,7 +111,7 @@ async def modelai_command(client, message):
     await asyncio.sleep(1)
     
     response = mango.chat.completions.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=memory
     )
     
