@@ -65,7 +65,7 @@ async def grp_ai(client: Client, message: Message):
     )
     if not query:
         return await message.reply_text( # type:ignore
-            "<b>Abe gadhe /ai k baad kuch likh to le !!.\n\nExample Use:\n<code>/ai Who is lord krshna??</code>\n\nHope you got it.Try it now..</b>"
+            "<b>Example Use:\n<code>/ai what is your name</code>\n\nHope you got it.Try it now..</b>"
         )
     if FSUB and not await get_fsub(client, message):return
     message.text = query # type:ignore
@@ -118,7 +118,7 @@ async def gen_image(client: Client, message: Message):
     finally:
         if sticker:await sticker.delete()
 
-@Client.on_message(filters.text & filters.incoming & filters.private) # type:ignore
+@Client.on_message(filters.text & filters.incoming & filters.private | filters.group) # type:ignore
 async def ai_res(client: Client, message: Message ):
     """
     Handles private text messages and sends AI responses back.
