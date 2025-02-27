@@ -5,7 +5,7 @@ from pyrogram.client import Client
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton 
 from pyrogram.errors import FloodWait
 from info import *
-from plugins.utils import create_image, get_ai_response 
+from plugins.utils import get_ai_response 
 from .db import *
 from .fsub import get_fsub
 from mango import Mango
@@ -34,7 +34,7 @@ async def startcmd(client: Client, message: Message):
     if FSUB and not await get_fsub(client, message):return
     await message.reply_photo(# type:ignore
         photo="https://telegra.ph/file/595e38a4d76848c01b110.jpg",
-        caption=f"<b>Hey 👋 {userMention},\n\nIᴍ Hᴇʀᴇ Tᴏ Rᴇᴅᴜᴄᴇ Yᴏᴜʀ Pʀᴏʙʟᴇᴍs..\nYᴏᴜ Cᴀɴ Usᴇ Mᴇ As ʏᴏᴜʀ Pʀɪᴠᴀᴛᴇ Assɪsᴛᴀɴᴛ..\nAsᴋ Mᴇ Aɴʏᴛʜɪɴɢ...Dɪʀᴇᴄᴛʟʏ..\n\nMʏ Cʀᴇᴀᴛᴏʀ : <a href=https://t.me/biisal>Bɪɪsᴀʟ</a>\nMʏ Lᴏᴠᴇʀ : <a href=tg://settings/>Tʜɪs Pᴇʀsᴏɴ</a></b>",
+        caption=f"<b>Hey 👋 {userMention},\n\nIᴍ Hᴇʀᴇ Tᴏ Rᴇᴅᴜᴄᴇ Yᴏᴜʀ Pʀᴏʙʟᴇᴍs..\nYᴏᴜ Cᴀɴ Usᴇ Mᴇ As ʏᴏᴜʀ Pʀɪᴠᴀᴛᴇ Assɪsᴛᴀɴᴛ..\nAsᴋ Mᴇ Aɴʏᴛʜɪɴɢ...Dɪʀᴇᴄᴛʟʏ..\n\nMʏ Cʀᴇᴀᴛᴏʀ : <a href=https://t.me/mallumovieworldmain1>MMW BOTZ</a></b>",
     ) 
     return
 
